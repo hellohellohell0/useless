@@ -139,8 +139,8 @@ async function uploadToRoblox(modelData, uploadConfig) {
 		uploadStatus.innerHTML = "Uploading directly to Roblox..."
 		uploadStatus.style.color = "orange"
 
-		// Convert string data to blob
-		const modelBlob = new Blob([modelData], { type: 'application/octet-stream' })
+		
+const modelBlob = new Blob([modelData], { type: 'application/xml' })
 
 		// Prepare the form data for Open Cloud API
 		const formData = new FormData()
