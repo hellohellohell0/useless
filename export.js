@@ -14,6 +14,26 @@ export const header = `<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" x
 
 export const footer = `
 </Item>
+<Item class="Camera">
+<Properties>
+<CoordinateFrame name="CFrame">
+<X>0</X>
+<Y>0</Y>
+<Z>15</Z>
+<R00>1</R00>
+<R01>0</R01>
+<R02>0</R02>
+<R10>0</R10>
+<R11>1</R11>
+<R12>0</R12>
+<R20>0</R20>
+<R21>0</R21>
+<R22>1</R22>
+</CoordinateFrame>
+<float name="FieldOfView">70</float>
+<string name="Name">ThumbnailCamera</string>
+</Properties>
+</Item>
 </Item>
 </roblox>
 `
