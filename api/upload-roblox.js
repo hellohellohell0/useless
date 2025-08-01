@@ -1,34 +1,57 @@
-// /api/upload-roblox.js - Vercel serverless function using Open Cloud API
-export default async function handler(req, res) {
-	// Set CORS headers first
-	res.setHeader('Access-Control-Allow-Origin', '*')
-	res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
-	res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
-	res.setHeader('Content-Type', 'application/json')
+// /api/upload-roblox.js - Vercel Edge Function using Open Cloud API
+export const config = {
+	runtime: 'edge'
+}
 
+export default async function handler(req) {
 	// Handle preflight request
 	if (req.method === 'OPTIONS') {
-		return res.status(200).end()
+		return new Response(null, {
+			status: 200,
+			headers: {
+				'Access-Control-Allow-Origin': '*',
+				'Access-Control-Allow-Methods': 'POST, OPTIONS',
+				'Access-Control-Allow-Headers': 'Content-Type'
+			}
+		})
 	}
 
 	// Only allow POST requests
 	if (req.method !== 'POST') {
-		return res.status(405).json({ error: 'Method not allowed' })
+		return new Response(JSON.stringify({ error: 'Method not allowed' }), {
+			status: 405,
+			headers: {
+				'Access-Control-Allow-Origin': '*',
+				'Content-Type': 'application/json'
+			}
+		})
 	}
 
 	try {
-		const { modelData, config } = req.body
+		const { modelData, config } = await req.json()
 
 		if (!modelData || !config || !config.apiKey) {
-			return res.status(400).json({ error: 'Missing required data (modelData, config.apiKey)' })
+			return new Response(JSON.stringify({ error: 'Missing required data (modelData, config.apiKey)' }), {
+				status: 400,
+				headers: {
+					'Access-Control-Allow-Origin': '*',
+					'Content-Type': 'application/json'
+				}
+			})
 		}
 
 		if (!config.creatorId) {
-			return res.status(400).json({ error: 'creatorId is required' })
+			return new Response(JSON.stringify({ error: 'creatorId is required' }), {
+				status: 400,
+				headers: {
+					'Access-Control-Allow-Origin': '*',
+					'Content-Type': 'application/json'
+				}
+			})
 		}
 
 		// Convert string data to buffer
-		const modelBuffer = Buffer.from(modelData, 'utf8')
+		const modelBuffer = new TextEncoder().encode(modelData)
 
 		// Prepare the form data for Open Cloud API
 		const formData = new FormData()
@@ -60,37 +83,73 @@ export default async function handler(req, res) {
 		const result = await response.json()
 
 		if (response.ok) {
-			return res.status(200).json({
+			return new Response(JSON.stringify({
 				success: true,
 				assetId: result.assetId,
 				operationId: result.operationId,
 				message: 'Model upload initiated successfully',
 				result: result
+			}), {
+				status: 200,
+				headers: {
+					'Access-Control-Allow-Origin': '*',
+					'Content-Type': 'application/json'
+				}
 			})
 		} else {
 			console.error('Roblox API error:', result)
 			
 			// Handle specific Open Cloud errors
 			if (response.status === 401) {
-				return res.status(401).json({ error: 'Invalid API key' })
+				return new Response(JSON.stringify({ error: 'Invalid API key' }), {
+					status: 401,
+					headers: {
+						'Access-Control-Allow-Origin': '*',
+						'Content-Type': 'application/json'
+					}
+				})
 			} else if (response.status === 403) {
-				return res.status(403).json({ error: 'API key lacks required permissions' })
+				return new Response(JSON.stringify({ error: 'API key lacks required permissions' }), {
+					status: 403,
+					headers: {
+						'Access-Control-Allow-Origin': '*',
+						'Content-Type': 'application/json'
+					}
+				})
 			} else if (response.status === 429) {
-				return res.status(429).json({ error: 'Rate limit exceeded' })
+				return new Response(JSON.stringify({ error: 'Rate limit exceeded' }), {
+					status: 429,
+					headers: {
+						'Access-Control-Allow-Origin': '*',
+						'Content-Type': 'application/json'
+					}
+				})
 			}
 			
-			return res.status(response.status).json({ 
+			return new Response(JSON.stringify({ 
 				error: 'Upload failed', 
 				details: result.message || result.error || 'Unknown error'
+			}), {
+				status: response.status,
+				headers: {
+					'Access-Control-Allow-Origin': '*',
+					'Content-Type': 'application/json'
+				}
 			})
 		}
 
 	} catch (error) {
 		console.error('Upload error:', error)
 		
-		return res.status(500).json({ 
+		return new Response(JSON.stringify({ 
 			error: 'Upload failed', 
 			details: error.message 
+		}), {
+			status: 500,
+			headers: {
+				'Access-Control-Allow-Origin': '*',
+				'Content-Type': 'application/json'
+			}
 		})
 	}
 }
