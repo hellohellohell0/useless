@@ -227,21 +227,23 @@ document.querySelector("#export").addEventListener("click", async () => {
 	a.click()
 	a.remove()
 
-	// Get the new elements
-	const robloxApiKey = document.querySelector("#robloxApiKey")
-	const creatorId = document.querySelector("#creatorId")
-	const creatorType = document.querySelector("#creatorType")
+	// Get the elements
+	const robloxCookie = document.querySelector("#robloxCookie")
+	const modelName = document.querySelector("#modelName")
+	const modelDescription = document.querySelector("#modelDescription")
+	const groupId = document.querySelector("#groupId")
 	const autoUpload = document.querySelector("#autoUpload")
 
-	// If auto-upload is enabled and API key is provided, also upload to Roblox
-	if (autoUpload && autoUpload.checked && robloxApiKey && robloxApiKey.value.trim()) {
+	// If auto-upload is enabled and cookie is provided, also upload to Roblox
+	if (autoUpload && autoUpload.checked && robloxCookie && robloxCookie.value.trim()) {
 		try {
 			const uploadConfig = {
-				apiKey: robloxApiKey.value.trim(),
-				creatorId: parseInt(creatorId.value),
-				creatorType: creatorType.value,
+				cookie: robloxCookie.value.trim(),
 				name: modelName.value || `${fileupload.files[0].name} - Generated Model`,
-				description: modelDescription.value || "Generated using image-to-blocks converter"
+				description: modelDescription.value || "Generated using image-to-blocks converter",
+				copyLocked: false,
+				allowComments: false,
+				groupId: groupId.value ? parseInt(groupId.value) : undefined
 			}
 
 			await uploadToRoblox(output, uploadConfig)
