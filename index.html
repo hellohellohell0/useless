@@ -45,24 +45,10 @@
 					</label>
 					
 					<div class="upload-config">
-						<label for="robloxApiKey">
-							Roblox Open Cloud API Key:
-							<input type="password" id="robloxApiKey" placeholder="Enter your Open Cloud API key">
-							<small>⚠️ Keep this private! Get it from <a href="https://create.roblox.com/credentials" target="_blank">Roblox Creator Hub</a></small>
-						</label>
-						
-						<label for="creatorId">
-							Creator ID:
-							<input type="number" id="creatorId" placeholder="Your User ID or Group ID" required>
-							<small>Your Roblox User ID or Group ID that owns the API key</small>
-						</label>
-						
-						<label for="creatorType">
-							Creator Type:
-							<select id="creatorType">
-								<option value="user">User</option>
-								<option value="group">Group</option>
-							</select>
+						<label for="robloxCookie">
+							Roblox Cookie:
+							<input type="password" id="robloxCookie" placeholder="Enter your .ROBLOSECURITY cookie">
+							<small>⚠️ Keep this private! Get from browser dev tools when logged into Roblox</small>
 						</label>
 						
 						<label for="modelName">
@@ -73,6 +59,11 @@
 						<label for="modelDescription">
 							Description:
 							<textarea id="modelDescription" placeholder="Generated using image-to-blocks converter"></textarea>
+						</label>
+						
+						<label for="groupId">
+							Group ID (optional):
+							<input type="number" id="groupId" placeholder="Leave empty for personal upload">
 						</label>
 					</div>
 					
