@@ -1,17 +1,14 @@
 {
-    "name": "image-to-roblox-blocks",
-    "version": "1.0.0",
-    "description": "Convert images to Roblox blocks with auto-upload functionality",
-    "main": "index.js",
-    "scripts": {
-      "dev": "vercel dev",
-      "build": "echo 'No build step required'",
-      "start": "echo 'Use vercel dev for local development'"
-    },
-    "dependencies": {
-      "noblox.js": "^4.15.0"
-    },
-    "engines": {
-      "node": ">=16.0.0"
-    }
+  "name": "image-to-roblox-blocks",
+  "version": "1.0.0",
+  "description": "Convert images to Roblox blocks with auto-upload functionality",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'No build step required'",
+    "start": "echo 'Use vercel dev for local development'"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   }
+}
