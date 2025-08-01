@@ -133,45 +133,52 @@ function exportToROBLOX(rect) {
 	return output
 }
 
-// Function to upload to Roblox via Vercel API
-// Function to upload to Roblox via Vercel API
+// Replace the uploadToRoblox function with direct client-side upload
 async function uploadToRoblox(modelData, uploadConfig) {
 	try {
-		uploadStatus.innerHTML = "Uploading to Roblox..."
+		uploadStatus.innerHTML = "Uploading directly to Roblox..."
 		uploadStatus.style.color = "orange"
 
-		const response = await fetch('/api/upload-roblox', {
+		// Convert string data to blob
+		const modelBlob = new Blob([modelData], { type: 'application/octet-stream' })
+
+		// Prepare the form data for Open Cloud API
+		const formData = new FormData()
+		
+		formData.append('request', JSON.stringify({
+			assetType: 'Model',
+			displayName: uploadConfig.name || "Generated Model",
+			description: uploadConfig.description || "Generated using image-to-blocks converter",
+			creationContext: {
+				creator: {
+					userId: uploadConfig.creatorType === 'group' ? undefined : uploadConfig.creatorId,
+					groupId: uploadConfig.creatorType === 'group' ? uploadConfig.creatorId : undefined
+				}
+			}
+		}))
+		formData.append('fileContent', modelBlob, 'model.rbxm')
+
+		// Upload directly to Roblox Open Cloud API
+		const response = await fetch('https://apis.roblox.com/assets/v1/assets', {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/json',
+				'x-api-key': uploadConfig.apiKey
 			},
-			body: JSON.stringify({
-				modelData: modelData,
-				config: uploadConfig
-			})
+			body: formData
 		})
-
-		// Check if the response is actually JSON
-		const contentType = response.headers.get('content-type')
-		if (!contentType || !contentType.includes('application/json')) {
-			// If it's not JSON, get the text to see what the error is
-			const errorText = await response.text()
-			throw new Error(`API returned non-JSON response: ${errorText.substring(0, 100)}...`)
-		}
 
 		const result = await response.json()
 
 		if (response.ok) {
-			uploadStatus.innerHTML = `✅ Upload successful! Model ID: ${result.assetId}`
+			uploadStatus.innerHTML = `✅ Upload successful! Asset ID: ${result.assetId}`
 			uploadStatus.style.color = "green"
 			return result
 		} else {
-			throw new Error(result.error || 'Upload failed')
+			throw new Error(result.message || result.error || 'Upload failed')
 		}
 	} catch (err) {
 		uploadStatus.innerHTML = `❌ Upload failed: ${err.message}`
 		uploadStatus.style.color = "red"
-		console.error('Full upload error:', err)
 		throw err
 	}
 }
