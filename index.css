@@ -1,0 +1,96 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap");
+
+body {
+	font-family: "Open Sans", sans-serif;
+	background-color: #000;
+	color: #fff;
+}
+
+canvas {
+	width: 20vw;
+}
+
+#error {
+	color: red;
+	font-size:24px;
+}
+
+h3 {
+	margin: 0;
+}
+
+textarea {
+	width: 20vw;
+	height: 25vh;
+	resize: none;
+}
+
+b, p {
+	float: left;
+	margin: 0;
+	padding-left: 1vw;
+}
+
+.container {
+	float: left;
+	margin: 0;
+	padding-left: 1vw;
+}
+
+#credits {
+	right: 0;
+	position: absolute;
+	height: 100vh;
+	width: 21vw;
+}
+
+img {
+	width: 7%;
+}
+
+#thresholdwarning {
+	color: rgb(248, 255, 143);
+}
+
+
+.upload-section {
+	margin-top: 20px;
+	padding: 15px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	background: #f9f9f9;
+}
+
+.upload-config {
+	margin-top: 10px;
+}
+
+.upload-config label {
+	display: block;
+	margin-bottom: 10px;
+}
+
+.upload-config input, 
+.upload-config textarea {
+	width: 100%;
+	padding: 5px;
+	margin-top: 3px;
+	box-sizing: border-box;
+}
+
+.upload-config small {
+	color: #666;
+	font-size: 0.8em;
+}
+
+.upload-status {
+	margin-top: 10px;
+	padding: 10px;
+	border-radius: 3px;
+	font-weight: bold;
+}
+
+#autoUpload:not(:checked) ~ .upload-config {
+	opacity: 0.5;
+	pointer-events: none;
+}
