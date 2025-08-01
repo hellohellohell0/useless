@@ -2,6 +2,17 @@
 const noblox = require("noblox.js")
 
 export default async function handler(req, res) {
+	// Set CORS headers first
+	res.setHeader('Access-Control-Allow-Origin', '*')
+	res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
+	res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+	res.setHeader('Content-Type', 'application/json')
+
+	// Handle preflight request
+	if (req.method === 'OPTIONS') {
+		return res.status(200).end()
+	}
+
 	// Only allow POST requests
 	if (req.method !== 'POST') {
 		return res.status(405).json({ error: 'Method not allowed' })
@@ -13,11 +24,6 @@ export default async function handler(req, res) {
 		if (!modelData || !config || !config.cookie) {
 			return res.status(400).json({ error: 'Missing required data' })
 		}
-
-		// Set CORS headers to allow frontend requests
-		res.setHeader('Access-Control-Allow-Origin', '*')
-		res.setHeader('Access-Control-Allow-Methods', 'POST')
-		res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
 
 		// Login to Roblox using the provided cookie
 		await noblox.setCookie(config.cookie)
