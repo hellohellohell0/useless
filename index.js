@@ -134,6 +134,7 @@ function exportToROBLOX(rect) {
 }
 
 // Function to upload to Roblox via Vercel API
+// Function to upload to Roblox via Vercel API
 async function uploadToRoblox(modelData, uploadConfig) {
 	try {
 		uploadStatus.innerHTML = "Uploading to Roblox..."
@@ -150,6 +151,14 @@ async function uploadToRoblox(modelData, uploadConfig) {
 			})
 		})
 
+		// Check if the response is actually JSON
+		const contentType = response.headers.get('content-type')
+		if (!contentType || !contentType.includes('application/json')) {
+			// If it's not JSON, get the text to see what the error is
+			const errorText = await response.text()
+			throw new Error(`API returned non-JSON response: ${errorText.substring(0, 100)}...`)
+		}
+
 		const result = await response.json()
 
 		if (response.ok) {
@@ -162,6 +171,7 @@ async function uploadToRoblox(modelData, uploadConfig) {
 	} catch (err) {
 		uploadStatus.innerHTML = `❌ Upload failed: ${err.message}`
 		uploadStatus.style.color = "red"
+		console.error('Full upload error:', err)
 		throw err
 	}
 }
